@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Application;
 
 use Laminas\Router\Http\Literal;
-use Laminas\Router\Http\Segment;
-use Laminas\ServiceManager\Factory\InvokableFactory;
 
 return [
     'router' => [
@@ -21,21 +19,21 @@ return [
                     ],
                 ],
             ],
-            'application' => [
-                'type'    => Segment::class,
+            'api' => [
+                'type'    => Literal::class,
                 'options' => [
-                    'route'    => '/application[/:action]',
+                    'route'    => '/api',
                     'defaults' => [
-                        'controller' => Controller\IndexController::class,
-                        'action'     => 'index',
+                        'controller' => Controller\ApiController::class,
                     ],
                 ],
             ],
         ],
     ],
     'controllers' => [
-        'factories' => [
-            Controller\IndexController::class => InvokableFactory::class,
+        'invokables' => [
+            Controller\ApiController::class,
+            Controller\IndexController::class,
         ],
     ],
     'view_manager' => [
@@ -52,6 +50,9 @@ return [
         ],
         'template_path_stack' => [
             __DIR__ . '/../view',
+        ],
+        'strategies' => [
+            'ViewJsonStrategy',
         ],
     ],
 ];
