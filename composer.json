@@ -56,6 +56,9 @@
         "allow-plugins": {
             "laminas/laminas-component-installer": true,
             "laminas/laminas-skeleton-installer": true
+        },
+        "platform": {
+            "php": "8.0.0"
         }
     }
 }

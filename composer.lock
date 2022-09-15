@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f8b1d93dc31c1dd92be4464b0f19fa6d",
+    "content-hash": "6a6e77efcb93ee53fb9321c6f690ccf1",
     "packages": [
         {
             "name": "brick/varexporter",
@@ -1933,25 +1933,25 @@
         },
         {
             "name": "symfony/deprecation-contracts",
-            "version": "v3.0.2",
+            "version": "v2.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/deprecation-contracts.git",
-                "reference": "26954b3d62a6c5fd0ea8a2a00c0353a14978d05c"
+                "reference": "e8b495ea28c1d97b5e0c121748d6f9b53d075c66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/26954b3d62a6c5fd0ea8a2a00c0353a14978d05c",
-                "reference": "26954b3d62a6c5fd0ea8a2a00c0353a14978d05c",
+                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/e8b495ea28c1d97b5e0c121748d6f9b53d075c66",
+                "reference": "e8b495ea28c1d97b5e0c121748d6f9b53d075c66",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.0.2"
+                "php": ">=7.1"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "3.0-dev"
+                    "dev-main": "2.5-dev"
                 },
                 "thanks": {
                     "name": "symfony/contracts",
@@ -1980,7 +1980,7 @@
             "description": "A generic function and convention to trigger deprecation notices",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.0.2"
+                "source": "https://github.com/symfony/deprecation-contracts/tree/v2.5.2"
             },
             "funding": [
                 {
@@ -1996,7 +1996,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-02T09:55:41+00:00"
+            "time": "2022-01-02T09:53:40+00:00"
         },
         {
             "name": "taylorsj1980/dmaw",
@@ -2004,12 +2004,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/taylorsj1980/dmaw.git",
-                "reference": "2fe085e45e2e920e4739ce33f69a2e021e8f1212"
+                "reference": "6aebee7c776308a493961f070393d3b98b5cf5c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/taylorsj1980/dmaw/zipball/2fe085e45e2e920e4739ce33f69a2e021e8f1212",
-                "reference": "2fe085e45e2e920e4739ce33f69a2e021e8f1212",
+                "url": "https://api.github.com/repos/taylorsj1980/dmaw/zipball/6aebee7c776308a493961f070393d3b98b5cf5c5",
+                "reference": "6aebee7c776308a493961f070393d3b98b5cf5c5",
                 "shasum": ""
             },
             "require": {
@@ -2029,7 +2029,7 @@
                 "issues": "https://github.com/taylorsj1980/dmaw/issues",
                 "source": "https://github.com/taylorsj1980/dmaw/tree/master"
             },
-            "time": "2022-09-14T13:29:55+00:00"
+            "time": "2022-09-15T15:19:55+00:00"
         },
         {
             "name": "webimpress/safe-writer",
@@ -2103,5 +2103,8 @@
         "php": "^7.3 || ~8.0.0"
     },
     "platform-dev": [],
+    "platform-overrides": {
+        "php": "8.0.0"
+    },
     "plugin-api-version": "2.3.0"
 }
