@@ -1,0 +1,28 @@
+<h3><?= $title; ?></h3>
+
+<?php if (!empty($errors)) { ?>
+
+    <div class="alert alert-danger" role="alert">
+        <ul>
+            <?php foreach ($errors as $error) { ?>
+                <li><?= $error; ?></li>
+            <?php } ?>
+        </ul>
+    </div>
+
+<?php }
+
+foreach ($hiddenFieldNames as $hiddenFieldName) {
+    echo $this->formHidden($fieldset->get($hiddenFieldName));
+}
+
+foreach ($fieldNames as $fieldName) { ?>
+
+    <div class="form-group">
+        <?php
+            echo $this->formLabel($fieldset->get($fieldName));
+            echo $this->formElement($fieldset->get($fieldName))
+        ?>
+    </div>
+
+<?php } ?>

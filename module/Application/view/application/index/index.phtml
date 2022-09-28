@@ -1,124 +1,69 @@
-<?php
-    $this->headTitle('Add test details');
-
-    $form->setAttribute('action', '/');
-    $form->prepare();
-
-    echo $this->form()->openTag($form);
-?>
-    <h3>Customer details</h3>
-
-    <?php if (!empty($customerErrors)) { ?>
-        <div class="alert alert-danger" role="alert">
-            <ul>
-                <?php foreach ($customerErrors as $customerError) { ?>
-                    <li><?= $customerError; ?></li>
-                <?php } ?>
-            </ul>
-        </div>
-    <?php } ?>
-
     <?php
-        $customerFieldset = $form->get('customer');
+        $this->headTitle('Add test details');
 
-        echo $this->formHidden($customerFieldset->get('customer_id'));
+        $form->setAttribute('action', '/');
+        $form->prepare();
 
-        $customerFieldNames = [
-            'first_name',
-            'surname',
-            'date_of_birth',
-            'nationality',
-            'password',
-        ];
+        echo $this->form()->openTag($form);
 
-        foreach ($customerFieldNames as $customerFieldName) { ?>
-
-            <div class="form-group">
-                <?php
-                    echo $this->formLabel($customerFieldset->get($customerFieldName));
-                    echo $this->formElement($customerFieldset->get($customerFieldName))
-                ?>
-            </div>
-
-        <?php }
+        //  Render customer details
+        echo $this->partial('partial/data-section.phtml', [
+            'title'             => 'Customer details',
+            'errors'            => $customerErrors,
+            'fieldset'          => $form->get('customer'),
+            'hiddenFieldNames'  => [
+                'customer_id',
+            ],
+            'fieldNames'        => [
+                'first_name',
+                'surname',
+                'date_of_birth',
+                'nationality',
+                'password',
+            ],
+        ]);
     ?>
 
     <hr/>
     <br/>
 
-    <h3>Account details</h3>
-
-    <?php if (!empty($accountErrors)) { ?>
-        <div class="alert alert-danger" role="alert">
-            <ul>
-                <?php foreach ($accountErrors as $accountError) { ?>
-                    <li><?= $accountError; ?></li>
-                <?php } ?>
-            </ul>
-        </div>
-    <?php } ?>
-
     <?php
-        $accountFieldset = $customerFieldset->get('account');
-
-        echo $this->formHidden($accountFieldset->get('account_id'));
-        echo $this->formHidden($accountFieldset->get('customer_id'));
-
-        $accountFieldNames = [
-            'country',
-            'opened',
-        ];
-
-        foreach ($accountFieldNames as $accountFieldName) { ?>
-
-            <div class="form-group">
-                <?php
-                    echo $this->formLabel($accountFieldset->get($accountFieldName));
-                    echo $this->formElement($accountFieldset->get($accountFieldName))
-                ?>
-            </div>
-
-        <?php }
+        //  Render account details
+        echo $this->partial('partial/data-section.phtml', [
+            'title'             => 'Account details',
+            'errors'            => $accountErrors,
+            'fieldset'          => $form->get('customer')->get('account'),
+            'hiddenFieldNames'  => [
+                'account_id',
+                'customer_id',
+            ],
+            'fieldNames'        => [
+                'country',
+                'opened',
+            ],
+        ]);
     ?>
 
     <hr/>
     <br/>
 
-    <h3>Transaction details</h3>
-
-    <?php if (!empty($transactionErrors)) { ?>
-        <div class="alert alert-danger" role="alert">
-            <ul>
-                <?php foreach ($transactionErrors as $transactionError) { ?>
-                    <li><?= $transactionError; ?></li>
-                <?php } ?>
-            </ul>
-        </div>
-    <?php } ?>
-
     <?php
-        $transactionFieldset = $accountFieldset->get('transaction');
-
-        echo $this->formHidden($transactionFieldset->get('transaction_id'));
-        echo $this->formHidden($transactionFieldset->get('account_id'));
-
-        $transactionFieldNames = [
-            'amount',
-            'currency',
-            'dr_or_cr',
-            'when',
-        ];
-
-        foreach ($transactionFieldNames as $transactionFieldName) { ?>
-
-            <div class="form-group">
-                <?php
-                    echo $this->formLabel($transactionFieldset->get($transactionFieldName));
-                    echo $this->formElement($transactionFieldset->get($transactionFieldName))
-                ?>
-            </div>
-
-        <?php }
+        //  Render transaction details
+        echo $this->partial('partial/data-section.phtml', [
+            'title'             => 'Transaction details',
+            'errors'            => $transactionErrors,
+            'fieldset'          => $form->get('customer')->get('account')->get('transaction'),
+            'hiddenFieldNames'  => [
+                'transaction_id',
+                'account_id',
+            ],
+            'fieldNames'        => [
+                'amount',
+                'currency',
+                'dr_or_cr',
+                'when',
+            ],
+        ]);
     ?>
 
     <br/>
