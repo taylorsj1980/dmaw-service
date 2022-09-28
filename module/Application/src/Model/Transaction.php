@@ -2,6 +2,7 @@
 
 namespace Application\Model;
 
+use Application\Util\Util;
 use DateTime;
 
 /**
@@ -145,5 +146,23 @@ class Transaction
     {
         $this->when = $when;
         return $this;
+    }
+
+    /**
+     * Create a transaction model populated with random data
+     *
+     * @return Transaction
+     */
+    public static function createRandom(): Transaction
+    {
+        $transaction = new Transaction();
+        $transaction->setTransactionId(rand(1, 50))
+                    ->setAccountId(rand(1, 50))
+                    ->setAmount(rand(100, 10000))
+                    ->setCurrency(Currency::createRandom())
+                    ->setWhen(Util::createRandomDate(2020, 2022))
+                    ->setDrOrCr(rand(0, 1) ? 'dr' : 'cr');
+
+        return $transaction;
     }
 }

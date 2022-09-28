@@ -1,68 +1,130 @@
 <?php
-/**
- * @var Laminas\View\Renderer\PhpRenderer $this
- */
+    $this->headTitle('Add test details');
+
+    $form->setAttribute('action', '/');
+    $form->prepare();
+
+    echo $this->form()->openTag($form);
 ?>
-<div class="jumbotron">
-    <h1 class="display-4">Welcome to<br>Laminas MVC Skeleton Application</h1>
+    <h3>Customer details</h3>
 
-    <p>
-        Congratulations! You have successfully installed the
-        <a href="https://github.com/laminas/laminas-mvc-skeleton" target="_blank">Laminas MVC Skeleton</a>.
-        This skeleton can serve as a simple starting point for you to begin
-        building your application on Laminas MVC.
-    </p>
-
-    <hr class="my-4">
-
-    <a class="btn btn-primary btn-lg" href="https://github.com/laminas" target="_blank">
-        Check Laminas on GitHub &raquo;
-    </a>
-</div>
-
-<div class="card-deck">
-    <div class="card">
-        <h2 class="card-header">Follow Development</h2>
-        <div class="card-body">
-            <p>
-                Laminas Project is under active development. If you are
-                interested in following the development, you can check
-                <a href="https://getlaminas.org/blog/">Laminas dev blog</a>,
-                and <a href="https://github.com/issues?utf8=%E2%9C%93&amp;q=is:issue+org:laminas">Laminas issue tracker</a>
-                (link requires a GitHub account). This is a great resource
-                for staying up to date with the latest developments!
-            </p>
-
-            <a class="btn btn-primary" href="https://getlaminas.org/" target="_blank">Laminas Project Portal &raquo;</a>
+    <?php if (!empty($customerErrors)) { ?>
+        <div class="alert alert-danger" role="alert">
+            <ul>
+                <?php foreach ($customerErrors as $customerError) { ?>
+                    <li><?= $customerError; ?></li>
+                <?php } ?>
+            </ul>
         </div>
-    </div>
+    <?php } ?>
 
-    <div class="card">
-        <h2 class="card-header">Discover Modules</h2>
-        <div class="card-body">
-            <p>
-                Laminas MVC is a modular application.
-                You can find multiple compatible modules on packagist.
-            </p>
+    <?php
+        $customerFieldset = $form->get('customer');
 
-            <a class="btn btn-primary" href="https://packagist.org/?tags=module~zf2~zendframework~zend%20framework~zend%20framework%202~zf3~zf~zend~laminas" target="_blank">
-                Explore Laminas Modules &raquo;
-            </a>
+        echo $this->formHidden($customerFieldset->get('customer_id'));
+
+        $customerFieldNames = [
+            'first_name',
+            'surname',
+            'date_of_birth',
+            'nationality',
+            'password',
+        ];
+
+        foreach ($customerFieldNames as $customerFieldName) { ?>
+
+            <div class="form-group">
+                <?php
+                    echo $this->formLabel($customerFieldset->get($customerFieldName));
+                    echo $this->formElement($customerFieldset->get($customerFieldName))
+                ?>
+            </div>
+
+        <?php }
+    ?>
+
+    <hr/>
+    <br/>
+
+    <h3>Account details</h3>
+
+    <?php if (!empty($accountErrors)) { ?>
+        <div class="alert alert-danger" role="alert">
+            <ul>
+                <?php foreach ($accountErrors as $accountError) { ?>
+                    <li><?= $accountError; ?></li>
+                <?php } ?>
+            </ul>
         </div>
-    </div>
+    <?php } ?>
 
-    <div class="card">
-        <h2 class="card-header">Help &amp; Support</h2>
-        <div class="card-body">
-            <p>
-                If you need any help or support while developing with Laminas,
-                you may reach us via <a href="https://laminas.dev/chat">chat</a> or
-                <a href="https://discourse.laminas.dev">forum</a>.
-                We'd love to hear any questions or feedback you may have
-                regarding any release.
-            </p>
+    <?php
+        $accountFieldset = $customerFieldset->get('account');
 
-            <a class="btn btn-primary" href="https://laminas.dev/chat" target="_blank">Ping us on chat &raquo;</a>
+        echo $this->formHidden($accountFieldset->get('account_id'));
+        echo $this->formHidden($accountFieldset->get('customer_id'));
+
+        $accountFieldNames = [
+            'country',
+            'opened',
+        ];
+
+        foreach ($accountFieldNames as $accountFieldName) { ?>
+
+            <div class="form-group">
+                <?php
+                    echo $this->formLabel($accountFieldset->get($accountFieldName));
+                    echo $this->formElement($accountFieldset->get($accountFieldName))
+                ?>
+            </div>
+
+        <?php }
+    ?>
+
+    <hr/>
+    <br/>
+
+    <h3>Transaction details</h3>
+
+    <?php if (!empty($transactionErrors)) { ?>
+        <div class="alert alert-danger" role="alert">
+            <ul>
+                <?php foreach ($transactionErrors as $transactionError) { ?>
+                    <li><?= $transactionError; ?></li>
+                <?php } ?>
+            </ul>
         </div>
-    </div>
-</div>
+    <?php } ?>
+
+    <?php
+        $transactionFieldset = $accountFieldset->get('transaction');
+
+        echo $this->formHidden($transactionFieldset->get('transaction_id'));
+        echo $this->formHidden($transactionFieldset->get('account_id'));
+
+        $transactionFieldNames = [
+            'amount',
+            'currency',
+            'dr_or_cr',
+            'when',
+        ];
+
+        foreach ($transactionFieldNames as $transactionFieldName) { ?>
+
+            <div class="form-group">
+                <?php
+                    echo $this->formLabel($transactionFieldset->get($transactionFieldName));
+                    echo $this->formElement($transactionFieldset->get($transactionFieldName))
+                ?>
+            </div>
+
+        <?php }
+    ?>
+
+    <br/>
+
+    <?php
+
+    echo $this->formSubmit($form->get('submit'));
+
+    echo $this->form()->closeTag();

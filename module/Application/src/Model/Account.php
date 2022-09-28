@@ -2,6 +2,7 @@
 
 namespace Application\Model;
 
+use Application\Util\Util;
 use DateTime;
 
 /**
@@ -122,5 +123,24 @@ class Account
     {
         $this->transaction = $transaction;
         return $this;
+    }
+
+    /**
+     * Create an account model populated with random data
+     *
+     * @return Account
+     */
+    public static function createRandom(): Account
+    {
+        $transaction = Transaction::createRandom();
+
+        $account = new Account();
+        $account->setAccountId($transaction->getAccountId())
+                ->setCustomerId(rand(1, 50))
+                ->setOpened(Util::createRandomDate(2010, 2020))
+                ->setCountry(Country::createRandom())
+                ->setTransaction($transaction);
+
+        return $account;
     }
 }
