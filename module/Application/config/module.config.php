@@ -19,6 +19,16 @@ return [
                     ],
                 ],
             ],
+            'compare' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/compare',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'compare',
+                    ],
+                ],
+            ],
             'api' => [
                 'type'    => Literal::class,
                 'options' => [

@@ -1,0 +1,94 @@
+<table class="table table-bordered">
+    <tbody>
+        <?php
+            //  Analyse the response data using reflection and extract the property names
+            $responseDataRO = new ReflectionObject($responseData);
+            $responseProperties = [];
+
+            foreach ($responseDataRO->getProperties() as $responseDataPropertyRP) {
+                if ($responseDataPropertyRP instanceof ReflectionProperty) {
+                    $responseDataPropertyRP->setAccessible(true);
+                    $responseProperties[$responseDataPropertyRP->getName()] = $responseDataPropertyRP;
+                }
+            }
+
+            //  Loop through the request data using reflection
+            $requestDataRO = new ReflectionObject($requestData);
+
+            foreach ($requestDataRO->getProperties() as $requestDataPropertyRP) {
+                if ($requestDataPropertyRP instanceof ReflectionProperty) {
+                    $requestDataPropertyRP->setAccessible(true); ?>
+
+                    <tr>
+                        <th style="width: 10%">
+                            <?= $requestDataPropertyRP->getName(); ?>
+                            <br/>(<?= gettype($requestDataPropertyRP->getValue($requestData)); ?>)
+                        </th>
+                        <?php
+                            $requestValue = $requestDataPropertyRP->getValue($requestData);
+                            $responseValue = null;
+
+                            //  Try to obtain a response value
+                            if (array_key_exists($requestDataPropertyRP->getName(), $responseProperties)) {
+                                $responseDataPropertyRP = $responseProperties[$requestDataPropertyRP->getName()];
+                                $responseValue = $responseDataPropertyRP->getValue($responseData);
+
+                                //  Unset the response copy of the value so it won't be reported as an extra field
+                                unset($responseProperties[$requestDataPropertyRP->getName()]);
+                            }
+
+                            //  If the request and response values are both objects then render those values in another table
+                            if (is_object($requestValue) && is_object($responseValue)
+                                && get_class($requestValue) === get_class($responseValue)
+                            ) { ?>
+                                <td colspan="3" style="width: 90%">
+                                    <em>CLASS: <?= get_class($requestValue); ?></em><br/><br/>
+                                    <?php
+                                        echo $this->partial('partial/object-compare.phtml', [
+                                            'requestData'   => $requestValue,
+                                            'responseData'  => $responseValue,
+                                        ]);
+                                    ?>
+                                </td>
+                            <?php } else {
+                                //  If we have objects here it will be because they are different classes or values - either way get the class names so the result can be displayed better
+                                if (is_object($requestValue)) {
+                                    $requestValue = '<em>CLASS: ' . get_class($requestValue) . '</em>';
+                                }
+
+                                if (is_object($responseValue)) {
+                                    $responseValue = '<em>CLASS: ' . get_class($responseValue) . '</em>';
+                                }
+
+                                $match = ($requestValue === $responseValue);
+
+                                ?>
+                                <td style="width: 40%"><?= (is_null($requestValue) ? '<em>NULL</em>' : $requestValue); ?></td>
+                                <td style="width: 40%"><?= (is_null($responseValue) ? '<em>NULL</em>' : $responseValue); ?></td>
+                                <td style="width: 10%" class="<?= ($match ? 'table-success' : 'table-danger'); ?>">
+                                    <span style="font-size: 30px; font-weight: bold;"><?= ($match ? '&check;' : '&cross;'); ?></span>
+                                </td>
+                            <? }
+                        ?>
+                    </tr>
+                <?php }
+            }
+
+            if (!empty($responseProperties)) { ?>
+                <tr>
+                    <th></th>
+                    <td colspan="3" style="width: 90%" class="table-danger">
+                        The following fields were present in the data obtained from the response but not in the original request data:<br/>
+                        <strong>
+                            <ul>
+                                <?php foreach (array_keys($responseProperties) as $responsePropertyName) { ?>
+                                    <li><?= $responsePropertyName; ?></li>
+                                <?php } ?>
+                            </ul>
+                        </strong>
+                    </td>
+                </tr>
+            <?php }
+       ?>
+    </tbody>
+</table>

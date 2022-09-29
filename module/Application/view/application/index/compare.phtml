@@ -1,0 +1,13 @@
+    <?php
+        $this->headTitle('Compare test details');
+    ?>
+    <h3>Data comparison</h3>
+
+    <?php
+        echo $this->partial('partial/object-compare.phtml', [
+            'requestData'   => $requestData,
+            'responseData'  => $responseData,
+        ]);
+    ?>
+
+    <a class="btn btn-primary" href="/" role="button">Reset</a>
