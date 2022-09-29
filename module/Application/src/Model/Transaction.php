@@ -3,7 +3,6 @@
 namespace Application\Model;
 
 use Application\Util\Util;
-use DateTime;
 
 /**
  * Transaction data entity
@@ -36,7 +35,7 @@ class Transaction
     private $drOrCr;
 
     /**
-     * @var ?DateTime
+     * @var string
      */
     private $when;
 
@@ -131,18 +130,18 @@ class Transaction
     }
 
     /**
-     * @return DateTime|null
+     * @return string
      */
-    public function getWhen(): ?DateTime
+    public function getWhen(): string
     {
         return $this->when;
     }
 
     /**
-     * @param DateTime|null $when
+     * @param string $when
      * @return Transaction
      */
-    public function setWhen(?DateTime $when): Transaction
+    public function setWhen(string $when): Transaction
     {
         $this->when = $when;
         return $this;

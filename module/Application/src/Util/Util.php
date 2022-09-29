@@ -2,8 +2,6 @@
 
 namespace Application\Util;
 
-use DateTime;
-
 /**
  * Utility class for helper functions
  */
@@ -35,21 +33,29 @@ class Util
     }
 
     /**
-     * Create a DateTime model populated with a random date between two years
+     * Create a date time string populated with a random date between two years
      *
      * @param int $minYear
      * @param int $maxYear
-     * @return DateTime
+     * @return string
      */
-    public static function createRandomDate(int $minYear, int $maxYear): DateTime
+    public static function createRandomDate(int $minYear, int $maxYear): string
     {
-        $year = rand($minYear, $maxYear);
-        $month = rand(1, 12);
         $day = rand(1, 31);
+        $month = rand(1, 12);
+        $year = rand($minYear, $maxYear);
 
-        $date = new DateTime();
-        $date->setDate($year, $month, $day);
+        //  Check that the day can be used with the month
+        if ($day > 30 && in_array($month, [4, 6, 9, 11])) {
+            $day = 30;
+        } elseif ($day > 28 && $month == 2) {
+            $day = 28;
+        }
 
-        return $date;
+        return implode('/', [
+           $day,
+           $month,
+           $year,
+        ]);
     }
 }

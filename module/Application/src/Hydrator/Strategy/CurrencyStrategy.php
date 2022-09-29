@@ -23,7 +23,6 @@ class CurrencyStrategy implements StrategyInterface
         return null;
     }
 
-
     /**
      * Converts the given value so that it can be hydrated by the hydrator.
      *

@@ -3,7 +3,6 @@
 namespace Application\Model;
 
 use Application\Util\Util;
-use DateTime;
 
 /**
  * Customer data entity
@@ -57,6 +56,7 @@ class Customer
         'Donna',
         'Michelle',
     ];
+
     /**
      * Surnames data
      *
@@ -108,7 +108,7 @@ class Customer
     private $surname;
 
     /**
-     * @var ?DateTime
+     * @var string
      */
     private $dateOfBirth;
 
@@ -182,18 +182,18 @@ class Customer
     }
 
     /**
-     * @return DateTime|null
+     * @return string
      */
-    public function getDateOfBirth(): ?DateTime
+    public function getDateOfBirth(): string
     {
         return $this->dateOfBirth;
     }
 
     /**
-     * @param DateTime|null $dateOfBirth
+     * @param string $dateOfBirth
      * @return Customer
      */
-    public function setDateOfBirth(?DateTime $dateOfBirth): Customer
+    public function setDateOfBirth(string $dateOfBirth): Customer
     {
         $this->dateOfBirth = $dateOfBirth;
         return $this;

@@ -3,7 +3,6 @@
 namespace Application\Model;
 
 use Application\Util\Util;
-use DateTime;
 
 /**
  * Account data entity
@@ -26,7 +25,7 @@ class Account
     private $country;
 
     /**
-     * @var ?DateTime
+     * @var string
      */
     private $opened;
 
@@ -90,18 +89,18 @@ class Account
     }
 
     /**
-     * @return DateTime|null
+     * @return string
      */
-    public function getOpened(): ?DateTime
+    public function getOpened(): string
     {
         return $this->opened;
     }
 
     /**
-     * @param DateTime|null $opened
+     * @param string $opened
      * @return Account
      */
-    public function setOpened(?DateTime $opened): Account
+    public function setOpened(string $opened): Account
     {
         $this->opened = $opened;
         return $this;
