@@ -36,28 +36,25 @@ class IndexController extends AbstractActionController
                 //  Set the customer data in the session for comparison later before attempting to send via DMAW
                 $session->requestData = $customer;
 
-                //  Get the name of the next environment
-                $targetEnvName = Util::getNextEnvName(true);
+                //  Use the factory to create the client
+                $dmawClient = ClientFactory::create();
 
+                //  Send the request to the API end point of the current environment - it will be passed on from there
+                $response = $dmawClient->post(sprintf('http://%s/api', Util::getEnvName()), [
+                    'customer' => $customer,
+                ]);
 
-//        //  Use the factory to create the client
-//        $client = ClientFactory::create();
-//
-////TODO - move the base target to be injected into the client by the factory?
-//        $response = $client->post(sprintf('http://%s/api', $targetEnvName), [
-//            'time' => time(),
-//        ]);
+                $responseData = $response->getBodyContentsAsArray(true);
 
                 //  Set the data from the response in session for comparison later
-//TODO - Extract the customer from the response in due course
-                $session->responseData = $customer;
+                $session->responseData = $responseData['customer'];
 
                 //  Redirect to the compare route so that the request and response data can be compared
                 return $this->redirect()->toRoute('compare');
             }
         } else {
             //  Inject random data into the form for testing
-            $form->bind(Customer::createRandom());
+            $form->bind(Util::createRandomCustomer());
         }
 
         //  Parse the errors into sections for display

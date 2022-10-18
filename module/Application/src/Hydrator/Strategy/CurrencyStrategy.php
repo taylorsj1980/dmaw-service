@@ -3,6 +3,7 @@
 namespace Application\Hydrator\Strategy;
 
 use Application\Model\Currency;
+use Application\Util\Util;
 use Laminas\Hydrator\Strategy\StrategyInterface;
 
 class CurrencyStrategy implements StrategyInterface
@@ -32,7 +33,7 @@ class CurrencyStrategy implements StrategyInterface
      */
     public function hydrate($value, ?array $data)
     {
-        $currencyData = Currency::CURRENCY_DATA;
+        $currencyData = Util::CURRENCY_DATA;
 
         if (isset($currencyData[$value])) {
             $currency = new Currency();

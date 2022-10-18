@@ -1,74 +1,72 @@
-    <?php
-        $this->headTitle('Add test details');
+<?php
+    $this->headTitle('Add test details');
 
-        $form->setAttribute('action', '/');
-        $form->prepare();
+    $form->setAttribute('action', '/');
+    $form->prepare();
 
-        echo $this->form()->openTag($form);
-
-        //  Render customer details
-        echo $this->partial('partial/data-section.phtml', [
-            'title'             => 'Customer details',
-            'errors'            => $customerErrors,
-            'fieldset'          => $form->get('customer'),
-            'hiddenFieldNames'  => [
-                'customer_id',
-            ],
-            'fieldNames'        => [
-                'first_name',
-                'surname',
-                'date_of_birth',
-                'nationality',
-                'password',
-            ],
-        ]);
-    ?>
-
-    <hr/>
-    <br/>
-
-    <?php
-        //  Render account details
-        echo $this->partial('partial/data-section.phtml', [
-            'title'             => 'Account details',
-            'errors'            => $accountErrors,
-            'fieldset'          => $form->get('customer')->get('account'),
-            'hiddenFieldNames'  => [
-                'account_id',
-                'customer_id',
-            ],
-            'fieldNames'        => [
-                'country',
-                'opened',
-            ],
-        ]);
-    ?>
-
-    <hr/>
-    <br/>
-
-    <?php
-        //  Render transaction details
-        echo $this->partial('partial/data-section.phtml', [
-            'title'             => 'Transaction details',
-            'errors'            => $transactionErrors,
-            'fieldset'          => $form->get('customer')->get('account')->get('transaction'),
-            'hiddenFieldNames'  => [
-                'transaction_id',
-                'account_id',
-            ],
-            'fieldNames'        => [
-                'amount',
-                'currency',
-                'dr_or_cr',
-                'when',
-            ],
-        ]);
-    ?>
-
-    <br/>
-
-    <?php
+    echo $this->form()->openTag($form);
+?>
+<div class="row">
+    <div class="col">
+        <?php
+            //  Render customer details
+            echo $this->partial('partial/data-section.phtml', [
+                'title'             => 'Customer details',
+                'errors'            => $customerErrors,
+                'fieldset'          => $form->get('customer'),
+                'hiddenFieldNames'  => [
+                    'customer_id',
+                ],
+                'fieldNames'        => [
+                    'first_name',
+                    'surname',
+                    'date_of_birth',
+                    'nationality',
+                    'password',
+                ],
+            ]);
+        ?>
+    </div>
+    <div class="col">
+        <?php
+            //  Render account details
+            echo $this->partial('partial/data-section.phtml', [
+                'title'             => 'Account details',
+                'errors'            => $accountErrors,
+                'fieldset'          => $form->get('customer')->get('account'),
+                'hiddenFieldNames'  => [
+                    'account_id',
+                    'customer_id',
+                ],
+                'fieldNames'        => [
+                    'country',
+                    'opened',
+                ],
+            ]);
+        ?>
+    </div>
+    <div class="col">
+        <?php
+            //  Render transaction details
+            echo $this->partial('partial/data-section.phtml', [
+                'title'             => 'Transaction details',
+                'errors'            => $transactionErrors,
+                'fieldset'          => $form->get('customer')->get('account')->get('transaction'),
+                'hiddenFieldNames'  => [
+                    'transaction_id',
+                    'account_id',
+                ],
+                'fieldNames'        => [
+                    'amount',
+                    'currency',
+                    'dr_or_cr',
+                    'when',
+                ],
+            ]);
+        ?>
+    </div>
+</div>
+<?php
 
     echo $this->formSubmit($form->get('submit'));
 

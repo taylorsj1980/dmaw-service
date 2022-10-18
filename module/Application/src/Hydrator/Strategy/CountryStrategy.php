@@ -3,6 +3,7 @@
 namespace Application\Hydrator\Strategy;
 
 use Application\Model\Country;
+use Application\Util\Util;
 use Laminas\Hydrator\Strategy\StrategyInterface;
 
 class CountryStrategy implements StrategyInterface
@@ -32,7 +33,7 @@ class CountryStrategy implements StrategyInterface
      */
     public function hydrate($value, ?array $data)
     {
-        $countryData = Country::COUNTRY_DATA;
+        $countryData = Util::COUNTRY_DATA;
 
         if (isset($countryData[$value])) {
             $country = new Country();

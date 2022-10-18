@@ -2,7 +2,7 @@
 
 namespace Application\Form\Select;
 
-use Application\Model\Country as CountryModel;
+use Application\Util\Util;
 use Laminas\Form\Element\Select;
 
 class Country extends Select
@@ -11,6 +11,6 @@ class Country extends Select
     {
         parent::__construct($name, $options);
 
-        $this->setValueOptions(CountryModel::COUNTRY_DATA);
+        $this->setValueOptions(Util::COUNTRY_DATA);
     }
 }
