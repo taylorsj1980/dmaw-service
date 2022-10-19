@@ -2,12 +2,10 @@
 
 namespace Application\Model;
 
-use Application\Util\Util;
-
 /**
  * Transaction data entity
  */
-class Transaction
+class Transaction extends AbstractModel
 {
     /**
      * @var ?int

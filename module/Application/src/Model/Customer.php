@@ -7,7 +7,7 @@ namespace Application\Model;
  *
  * @dmaw include
  */
-class Customer
+class Customer extends AbstractModel
 {
     /**
      * @var ?int

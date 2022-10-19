@@ -28,19 +28,30 @@ class ApiController extends AbstractRestfulController
         try {
             //  Unmarshal the data to return an array containing the data model objects (if appropriate DMAW metadata is present)
             $unmarshalledData = $dmawClient::unmarshal($data);
+            $customerIn = $unmarshalledData['customer'];
 
             //  Get the name of the next environment to send the request to
-            $targetEnvName = Util::getNextEnvName();
+            $targetEnvName = Util::getEnvName(true);
 
             if (is_string($targetEnvName)) {
                 //  Send the unmarshalled data on to the next environment
                 $response = $dmawClient->post(sprintf('http://%s/api', $targetEnvName), $unmarshalledData);
 
-                $unmarshalledData = $response->getBodyContentsAsArray(true);
-            }
+                $unmarshalledResponseData = $response->getBodyContentsAsArray(true);
+                $customerOut = $unmarshalledResponseData['customer'];
 
-            //  Marshal the data again to return a JSON copy
-            $data = $dmawClient::marshal($unmarshalledData);
+                //  Add a comparison to the unmarshalled data so it can be returned in the response
+                if (!isset($unmarshalledResponseData['comparisons'])) {
+                    $unmarshalledResponseData['comparisons'] = [];
+                }
+
+                $unmarshalledResponseData['comparisons'][Util::getEnvName()] = Util::getComparisonHashes($customerIn, $customerOut);
+
+                $data = $dmawClient::marshal($unmarshalledResponseData);
+            } else {
+                //  Marshal the data again to return a JSON copy
+                $data = $dmawClient::marshal($unmarshalledData);
+            }
         } catch (DmawException $ex) {
             $response = new Response();
             $response->setContent($ex->getMessage());
@@ -48,13 +59,6 @@ class ApiController extends AbstractRestfulController
 
             return $response;
         }
-
-        //  Add a marker in the data to show that the package has been processed by this environment
-        if (!isset($data['environments_processed'])) {
-            $data['environments_processed'] = [];
-        }
-
-        $data['environments_processed'][Util::getEnvName()] = hash('md5', serialize(new Response()));
 
         return new JsonModel($data);
     }

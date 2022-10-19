@@ -1,6 +1,20 @@
 <table class="table table-bordered">
     <tbody>
         <?php
+            $requestHash = \Application\Util\Util::getComparisonHash($requestData);
+            $responseHash = \Application\Util\Util::getComparisonHash($responseData);
+
+            $match = ($requestHash === $responseHash);
+        ?>
+        <tr>
+            <th>Comparison hash</th>
+            <td><?= $requestHash; ?></td>
+            <td><?= $responseHash; ?></td>
+            <td style="width: 10%" class="<?= ($match ? 'table-success' : 'table-danger'); ?>">
+                <span style="font-size: 30px; font-weight: bold;"><?= ($match ? '&check;' : '&cross;'); ?></span>
+            </td>
+        </tr>
+        <?php
             //  Analyse the response data using reflection and extract the property names
             $responseDataRO = new ReflectionObject($responseData);
             $responseProperties = [];

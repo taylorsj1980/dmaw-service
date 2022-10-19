@@ -1,12 +1,20 @@
     <?php
         $this->headTitle('Compare test details');
     ?>
-    <h3>Data comparison</h3>
+    <h3>Data object comparison</h3>
 
     <?php
         echo $this->partial('partial/object-compare.phtml', [
             'requestData'   => $requestData,
             'responseData'  => $responseData,
+        ]);
+    ?>
+
+    <h3>Data conversion comparisons</h3>
+
+    <?php
+        echo $this->partial('partial/conversion-compare.phtml', [
+            'comparisons' => $comparisons,
         ]);
     ?>
 

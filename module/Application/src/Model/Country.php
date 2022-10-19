@@ -5,7 +5,7 @@ namespace Application\Model;
 /**
  * Country data entity
  */
-class Country
+class Country extends AbstractModel
 {
     /**
      * @var string

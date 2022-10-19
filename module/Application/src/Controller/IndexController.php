@@ -22,6 +22,7 @@ class IndexController extends AbstractActionController
         $session = new Container();
         $session->requestData = null;
         $session->responseData = null;
+        $session->comparisons = null;
 
         $request = $this->getRequest();
 
@@ -45,9 +46,17 @@ class IndexController extends AbstractActionController
                 ]);
 
                 $responseData = $response->getBodyContentsAsArray(true);
+                $returnedCustomer = $responseData['customer'];
 
                 //  Set the data from the response in session for comparison later
-                $session->responseData = $responseData['customer'];
+                $session->responseData = $returnedCustomer;
+
+                //  Extract any comparison data added by other servers from the response data
+                $comparisons = (isset($responseData['comparisons']) ? $responseData['comparisons'] : []);
+
+                //  Perform one last comparison and add the data to the session to display in comparison
+                $comparisons[Util::getEnvName()] = Util::getComparisonHashes($customer, $returnedCustomer);
+                $session->comparisons = $comparisons;
 
                 //  Redirect to the compare route so that the request and response data can be compared
                 return $this->redirect()->toRoute('compare');
@@ -94,9 +103,13 @@ class IndexController extends AbstractActionController
             return $this->redirect()->toRoute('home');
         }
 
+        $comparisons = $session->comparisons;
+        ksort($comparisons);
+
         return [
             'requestData'   => $requestData,
             'responseData'  => $responseData,
+            'comparisons'   => $comparisons,
         ];
     }
 }

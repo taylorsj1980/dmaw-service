@@ -322,32 +322,24 @@ class Util
     ];
 
     /**
-     * Get the current environment name
-     *
-     * @return  string
-     */
-    public static function getEnvName(): string
-    {
-        return 'dmaw' . getenv('DMAW_ID');
-    }
-
-    /**
-     * Get the next environment name based on the current environment - return false if there isn't another environment
+     * Get the environment name - or environment name for the next numerical value if it is exists
      *
      * @return  string|bool
      */
-    public static function getNextEnvName()
+    public static function getEnvName(bool $nextEnv = false)
     {
-        //  Determine which is the "next" service
-        $nextEnvId = getenv('DMAW_ID') + 1;
-        $dmawEnvCount = getenv('DMAW_COUNT');
+        $envNumber = getenv('DMAW_ID');
 
-        //  If we're at the last env them just use the first one
-        if ($nextEnvId > $dmawEnvCount) {
-            return false;
+        if ($nextEnv) {
+            $envNumber++;
+
+            //  If the env number if greater than the count then return false
+            if ($envNumber > getenv('DMAW_COUNT')) {
+                return false;
+            }
         }
 
-        return 'dmaw' . $nextEnvId;
+        return 'dmaw' . $envNumber;
     }
 
     /**
@@ -376,7 +368,7 @@ class Util
      *
      * @return Model\Account
      */
-    public static function createRandomAccount(): Model\Account
+    private static function createRandomAccount(): Model\Account
     {
         $transaction = self::createRandomTransaction();
 
@@ -395,7 +387,7 @@ class Util
      *
      * @return Model\Transaction
      */
-    public static function createRandomTransaction(): Model\Transaction
+    private static function createRandomTransaction(): Model\Transaction
     {
         $transaction = new Model\Transaction();
         $transaction->setTransactionId(rand(1, 50))
@@ -413,7 +405,7 @@ class Util
      *
      * @return Model\Country
      */
-    public static function createRandomCountry(): Model\Country
+    private static function createRandomCountry(): Model\Country
     {
         $iso2 = array_rand(self::COUNTRY_DATA);
 
@@ -429,7 +421,7 @@ class Util
      *
      * @return Model\Currency
      */
-    public static function createRandomCurrency(): Model\Currency
+    private static function createRandomCurrency(): Model\Currency
     {
         $code = array_rand(self::CURRENCY_DATA);
 
@@ -447,7 +439,7 @@ class Util
      * @param int $maxYear
      * @return string
      */
-    public static function createRandomDate(int $minYear, int $maxYear): string
+    private static function createRandomDate(int $minYear, int $maxYear): string
     {
         $day = rand(1, 31);
         $month = rand(1, 12);
@@ -465,5 +457,31 @@ class Util
            $month,
            $year,
         ]);
+    }
+
+    /**
+     * Get a small array containing some comparison data based on the contents of the models
+     *
+     * @param Model\AbstractModel $model1
+     * @param Model\AbstractModel $model2
+     * @return array
+     */
+    public static function getComparisonHashes(Model\AbstractModel $model1, Model\AbstractModel $model2): array
+    {
+        return [
+            'request' => self::getComparisonHash($model1),
+            'response' => self::getComparisonHash($model2),
+        ];
+    }
+
+    /**
+     * Get a hash representing the model data
+     *
+     * @param Model\AbstractModel $model
+     * @return string
+     */
+    public static function getComparisonHash(Model\AbstractModel $model): string
+    {
+        return hash('md5', serialize($model));
     }
 }

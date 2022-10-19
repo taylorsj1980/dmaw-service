@@ -5,7 +5,7 @@ namespace Application\Model;
 /**
  * Account data entity
  */
-class Account
+class Account extends AbstractModel
 {
     /**
      * @var ?int

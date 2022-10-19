@@ -1,0 +1,31 @@
+<?php
+    $envName = key($comparisons);
+    $comparison = current($comparisons);
+    $nextComparison = next($comparisons);
+?>
+
+<h4><?= $envName; ?></h4>
+
+<table class="table table-bordered">
+    <tbody>
+        <tr>
+            <td>Request comparison hash</td>
+            <td><?= $comparison['request']; ?></td>
+        </tr>
+        <?php if ($nextComparison) { ?>
+            <tr>
+                <td colspan="2">
+                    <?php
+                        echo $this->partial('partial/conversion-compare.phtml', [
+                            'comparisons' => $comparisons,
+                        ]);
+                    ?>
+                </td>
+            </tr>
+        <?php } ?>
+        <tr>
+            <td>Response comparison hash</td>
+            <td><?= $comparison['response']; ?></td>
+        </tr>
+    </tbody>
+</table>

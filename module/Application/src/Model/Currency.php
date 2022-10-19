@@ -5,7 +5,7 @@ namespace Application\Model;
 /**
  * Currency data entity
  */
-class Currency
+class Currency extends AbstractModel
 {
     /**
      * @var string
