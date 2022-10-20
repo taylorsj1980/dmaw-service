@@ -1,4 +1,4 @@
-version: "3"
+version: "2"
 services:
   dmaw1:
     build: .
@@ -12,8 +12,6 @@ services:
 
   dmaw2:
     build: .
-    ports:
-      - "8081:80"
     volumes:
       - .:/var/www
     environment:
@@ -22,8 +20,6 @@ services:
 
   dmaw3:
     build: .
-    ports:
-      - "8082:80"
     volumes:
       - .:/var/www
     environment:
@@ -32,8 +28,6 @@ services:
 
   dmaw4:
     build: .
-    ports:
-      - "8083:80"
     volumes:
       - .:/var/www
     environment:
@@ -42,8 +36,6 @@ services:
 
   dmaw5:
     build: .
-    ports:
-      - "8084:80"
     volumes:
       - .:/var/www
     environment:
