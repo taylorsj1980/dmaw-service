@@ -1,14 +1,8 @@
 {
-    "name": "laminas/laminas-mvc-skeleton",
-    "description": "Laminas MVC Skeleton Application",
+    "name": "taylorsj1980/dmaw-service",
+    "description": "Data Model API Wrapper (DMAW) test suite",
     "type": "project",
     "license": "BSD-3-Clause",
-    "keywords": [
-        "laminas",
-        "mvc",
-        "skeleton",
-        "framework"
-    ],
     "require": {
         "php": "^7.3 || ~8.0.0",
         "laminas/laminas-component-installer": "^2.4",
