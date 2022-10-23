@@ -3,7 +3,6 @@
 namespace Application\Form;
 
 use Application\Form\Fieldset\Customer as CustomerFieldset;
-use Application\Hydrator\Customer as CustomerHydrator;
 use Application\Model\Customer as CustomerModel;
 use Laminas\Form\Form;
 use Exception;

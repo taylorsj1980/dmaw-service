@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Application\Controller;
 
 use Application\Form\Customer as CustomerForm;
-use Application\Model\Customer;
 use Application\Util\Util;
 use Dmaw\ClientFactory;
 use Laminas\Mvc\Controller\AbstractActionController;
@@ -16,7 +15,9 @@ class IndexController extends AbstractActionController
     public function indexAction()
     {
         $form = new CustomerForm();
-        $errors = [];
+
+        //  Initialise the error message container arrays
+        $customerErrors = $accountErrors = $transactionErrors = [];
 
         //  Clear any data in the session
         $session = new Container();
@@ -60,28 +61,26 @@ class IndexController extends AbstractActionController
 
                 //  Redirect to the compare route so that the request and response data can be compared
                 return $this->redirect()->toRoute('compare');
+            } else {
+                //  Process the errors
+                if (isset($errors['customer'])) {
+                    $customerErrors = $errors['customer'];
+
+                    if (isset($customerErrors['account'])) {
+                        $accountErrors = $customerErrors['account'];
+
+                        if (isset($accountErrors['transaction'])) {
+                            $transactionErrors = $accountErrors['transaction'];
+                            unset($accountErrors['transaction']);
+                        }
+
+                        unset($customerErrors['account']);
+                    }
+                }
             }
         } else {
             //  Inject random data into the form for testing
             $form->bind(Util::createRandomCustomer());
-        }
-
-        //  Parse the errors into sections for display
-        $customerErrors = $accountErrors = $transactionErrors = [];
-
-        if (isset($errors['customer'])) {
-            $customerErrors = $errors['customer'];
-
-            if (isset($customerErrors['account'])) {
-                $accountErrors = $customerErrors['account'];
-
-                if (isset($accountErrors['transaction'])) {
-                    $transactionErrors = $accountErrors['transaction'];
-                    unset($accountErrors['transaction']);
-                }
-
-                unset($customerErrors['account']);
-            }
         }
 
         return [
