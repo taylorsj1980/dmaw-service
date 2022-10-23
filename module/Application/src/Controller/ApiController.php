@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Application\Controller;
 
 use Application\Util\Util;
-use Dmaw\ClientFactory;
+use Dmaw\Client as DmawClient;
 use Dmaw\Exception as DmawException;
 use Laminas\Mvc\Controller\AbstractRestfulController;
 use Laminas\Http\Response;
@@ -14,6 +14,19 @@ use Laminas\View\Model\JsonModel;
 class ApiController extends AbstractRestfulController
 {
     /**
+     * @var DmawClient
+     */
+    private $dmawClient;
+
+    /**
+     * @param DmawClient $dmawClient
+     */
+    public function __construct(DmawClient $dmawClient)
+    {
+        $this->dmawClient = $dmawClient;
+    }
+
+    /**
      * Create a new resource
      *
      * @param  mixed $data
@@ -21,13 +34,10 @@ class ApiController extends AbstractRestfulController
      */
     public function create($data)
     {
-        //  Use the factory to create the client
-        $dmawClient = ClientFactory::create();
-
         //  Unmarshal the data with the client
         try {
             //  Unmarshal the data to return an array containing the data model objects (if appropriate DMAW metadata is present)
-            $unmarshalledData = $dmawClient::unmarshal($data);
+            $unmarshalledData = $this->dmawClient::unmarshal($data);
             $customerIn = $unmarshalledData['customer'];
 
             //  Get the name of the next environment to send the request to
@@ -35,7 +45,7 @@ class ApiController extends AbstractRestfulController
 
             if (is_string($targetEnvName)) {
                 //  Send the unmarshalled data on to the next environment
-                $response = $dmawClient->post(sprintf('http://%s/api', $targetEnvName), $unmarshalledData);
+                $response = $this->dmawClient->post(sprintf('http://%s/api', $targetEnvName), $unmarshalledData);
 
                 $unmarshalledResponseData = $response->getBodyContentsAsArray(true);
                 $customerOut = $unmarshalledResponseData['customer'];
@@ -47,10 +57,10 @@ class ApiController extends AbstractRestfulController
 
                 $unmarshalledResponseData['comparisons'][Util::getEnvName()] = Util::getComparisonHashes($customerIn, $customerOut);
 
-                $data = $dmawClient::marshal($unmarshalledResponseData);
+                $data = $this->dmawClient::marshal($unmarshalledResponseData);
             } else {
                 //  Marshal the data again to return a JSON copy
-                $data = $dmawClient::marshal($unmarshalledData);
+                $data = $this->dmawClient::marshal($unmarshalledData);
             }
         } catch (DmawException $ex) {
             $response = new Response();

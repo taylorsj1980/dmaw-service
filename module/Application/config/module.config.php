@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Application;
 
+use Dmaw;
+use Laminas\Mvc\Controller\LazyControllerAbstractFactory;
 use Laminas\Router\Http\Literal;
 
 return [
@@ -41,9 +43,16 @@ return [
         ],
     ],
     'controllers' => [
-        'invokables' => [
-            Controller\ApiController::class,
-            Controller\IndexController::class,
+        'factories' => [
+            Controller\ApiController::class => LazyControllerAbstractFactory::class,
+            Controller\IndexController::class => LazyControllerAbstractFactory::class,
+        ],
+    ],
+    'service_manager' => [
+        'factories' => [
+            Dmaw\Client::class => function () {
+                return Dmaw\ClientFactory::create();
+            },
         ],
     ],
     'view_manager' => [

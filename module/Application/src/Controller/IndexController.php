@@ -6,12 +6,25 @@ namespace Application\Controller;
 
 use Application\Form\Customer as CustomerForm;
 use Application\Util\Util;
-use Dmaw\ClientFactory;
+use Dmaw\Client as DmawClient;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\Session\Container;
 
 class IndexController extends AbstractActionController
 {
+    /**
+     * @var DmawClient
+     */
+    private $dmawClient;
+
+    /**
+     * @param DmawClient $dmawClient
+     */
+    public function __construct(DmawClient $dmawClient)
+    {
+        $this->dmawClient = $dmawClient;
+    }
+
     public function indexAction()
     {
         $form = new CustomerForm();
@@ -38,11 +51,8 @@ class IndexController extends AbstractActionController
                 //  Set the customer data in the session for comparison later before attempting to send via DMAW
                 $session->requestData = $customer;
 
-                //  Use the factory to create the client
-                $dmawClient = ClientFactory::create();
-
                 //  Send the request to the API end point of the current environment - it will be passed on from there
-                $response = $dmawClient->post(sprintf('http://%s/api', Util::getEnvName()), [
+                $response = $this->dmawClient->post(sprintf('http://%s/api', Util::getEnvName()), [
                     'customer' => $customer,
                 ]);
 
