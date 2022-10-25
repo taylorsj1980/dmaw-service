@@ -331,13 +331,18 @@ class Util
     }
 
     /**
-     * Get a hash representing the model data
+     * Get a pair of string representations for the model
      *
      * @param Model\AbstractModel $model
-     * @return string
+     * @return array
      */
-    public static function getComparisonHash(Model\AbstractModel $model): string
+    public static function getComparisonHash(Model\AbstractModel $model): array
     {
-        return hash('md5', serialize($model));
+        $serialisation = serialize($model);
+
+        return [
+            'hash'          => hash('md5', $serialisation),
+            'serialisation' => $serialisation,
+        ];
     }
 }

@@ -1,19 +1,5 @@
-<table class="table table-bordered">
+<table class="table table-bordered object-compare-table">
     <tbody>
-        <?php
-            $requestHash = \Application\Util\Util::getComparisonHash($requestData);
-            $responseHash = \Application\Util\Util::getComparisonHash($responseData);
-
-            $match = ($requestHash === $responseHash);
-        ?>
-        <tr>
-            <th>Comparison hash</th>
-            <td><?= $requestHash; ?></td>
-            <td><?= $responseHash; ?></td>
-            <td style="width: 10%" class="<?= ($match ? 'table-success' : 'table-danger'); ?>">
-                <span style="font-size: 30px; font-weight: bold;"><?= ($match ? '&check;' : '&cross;'); ?></span>
-            </td>
-        </tr>
         <?php
             //  Analyse the response data using reflection and extract the property names
             $responseDataRO = new ReflectionObject($responseData);
@@ -34,7 +20,7 @@
                     $requestDataPropertyRP->setAccessible(true); ?>
 
                     <tr>
-                        <th style="width: 10%">
+                        <th class="object-compare-table-field">
                             <?= $requestDataPropertyRP->getName(); ?>
                             <br/>(<?= gettype($requestDataPropertyRP->getValue($requestData)); ?>)
                         </th>
@@ -55,8 +41,8 @@
                             if (is_object($requestValue) && is_object($responseValue)
                                 && get_class($requestValue) === get_class($responseValue)
                             ) { ?>
-                                <td colspan="3" style="width: 90%">
-                                    <em>CLASS: <?= get_class($requestValue); ?></em><br/><br/>
+                                <td colspan="3">
+                                    <div class="class-name">CLASS: <?= get_class($requestValue); ?></div>
                                     <?php
                                         echo $this->partial('partial/object-compare.phtml', [
                                             'requestData'   => $requestValue,
@@ -67,19 +53,19 @@
                             <?php } else {
                                 //  If we have objects here it will be because they are different classes or values - either way get the class names so the result can be displayed better
                                 if (is_object($requestValue)) {
-                                    $requestValue = '<em>CLASS: ' . get_class($requestValue) . '</em>';
+                                    $requestValue = '<div class="class-name">CLASS: ' . get_class($requestValue) . '</div>';
                                 }
 
                                 if (is_object($responseValue)) {
-                                    $responseValue = '<em>CLASS: ' . get_class($responseValue) . '</em>';
+                                    $responseValue = '<div class="class-name">CLASS: ' . get_class($responseValue) . '</div>';
                                 }
 
                                 $match = ($requestValue === $responseValue);
 
                                 ?>
-                                <td style="width: 40%"><?= (is_null($requestValue) ? '<em>NULL</em>' : $requestValue); ?></td>
-                                <td style="width: 40%"><?= (is_null($responseValue) ? '<em>NULL</em>' : $responseValue); ?></td>
-                                <td style="width: 10%" class="<?= ($match ? 'table-success' : 'table-danger'); ?>">
+                                <td class="object-compare-table-sent <?= ($match ? '' : 'table-danger'); ?>"><?= (is_null($requestValue) ? '<em>NULL</em>' : $requestValue); ?></td>
+                                <td class="object-compare-table-received <?= ($match ? '' : 'table-danger'); ?>"><?= (is_null($responseValue) ? '<em>NULL</em>' : $responseValue); ?></td>
+                                <td class="object-compare-table-result <?= ($match ? 'table-success' : 'table-danger'); ?>">
                                     <span style="font-size: 30px; font-weight: bold;"><?= ($match ? '&check;' : '&cross;'); ?></span>
                                 </td>
                             <? }
@@ -91,7 +77,7 @@
             if (!empty($responseProperties)) { ?>
                 <tr>
                     <th></th>
-                    <td colspan="3" style="width: 90%" class="table-danger">
+                    <td colspan="3" class="table-danger">
                         The following fields were present in the data obtained from the response but not in the original request data:<br/>
                         <strong>
                             <ul>

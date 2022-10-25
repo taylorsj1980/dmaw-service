@@ -1,21 +1,79 @@
-    <?php
-        $this->headTitle('Compare test details');
+<?php
+    $this->headTitle('Compare test details');
+?>
+<style>
+    .object-compare-table {
+        border: 5px solid;
+        font-size: 18px;
+    }
+
+    .object-compare-table .object-compare-table-sent,
+    .object-compare-table .object-compare-table-received {
+        width: 40%;
+    }
+
+    .object-compare-table .object-compare-table-result {
+        width: 100px;
+        text-align: center;
+    }
+
+    .object-compare-table th {
+        padding: 3px;
+    }
+
+    .object-compare-table td {
+        padding: 17px 3px 3px 3px;
+        line-height: 22px;
+    }
+
+    .class-name {
+        font-size: 18px;
+        padding-left: 3px;
+        font-weight: bold;
+        font-style: italic;
+    }
+</style>
+<h3>Data object comparison</h3>
+
+<div class="class-name">CLASS: <?= get_class($requestData); ?></div>
+
+<?php
+    echo $this->partial('partial/object-compare.phtml', [
+        'requestData'   => $requestData,
+        'responseData'  => $responseData,
+    ]);
+?>
+
+<h3>Data conversion comparisons</h3>
+
+<?php
+    foreach ($comparisons as $envName => $comparison) {
+        $comparisonRequest = $comparison['request'];
+        $comparisonResponse = $comparison['response'];
+        $sameData = ($comparisonRequest['hash'] === $comparisonResponse['hash']);
     ?>
-    <h3>Data object comparison</h3>
 
-    <?php
-        echo $this->partial('partial/object-compare.phtml', [
-            'requestData'   => $requestData,
-            'responseData'  => $responseData,
-        ]);
-    ?>
+    <h4><?= $envName; ?>&nbsp;<span class="badge <?= ($sameData ? 'badge-success' : 'badge-danger'); ?>"><?= ($sameData ? 'SAME' : 'DIFFERENT'); ?></span></h4>
 
-    <h3>Data conversion comparisons</h3>
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th>Request</th>
+                <td>
+                    <?= $comparisonRequest['hash']; ?><br/>
+                    <?= $comparisonRequest['serialisation']; ?>
+                </td>
+            </tr>
+            <tr>
+                <th>Response</th>
+                <td>
+                    <?= $comparisonResponse['hash']; ?><br/>
+                    <?= $comparisonResponse['serialisation']; ?>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-    <?php
-        echo $this->partial('partial/conversion-compare.phtml', [
-            'comparisons' => $comparisons,
-        ]);
-    ?>
+<?php } ?>
 
-    <a class="btn btn-primary" href="/" role="button">Reset</a>
+<a class="btn btn-primary" href="/" role="button">Reset</a>
